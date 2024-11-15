@@ -1,27 +1,22 @@
 ---
 title: "Dashboards for Clicker Data"
 author: '[[Kashmala Arif, ka369]]'
-subtitle: INFO 4100 Learning Analytics
+
 output:
   word_document: default
 ---
 
-This project is about developing a learning analytics dashboard based on clicker data. You will work as a team to learn how to make a dashboard using R Shiny (official page with several tutorials: https://shiny.rstudio.com/tutorial/). 
+This project is about developing a learning analytics dashboard based on clicker data. 
 
-**Learning Objectives**
+**Objectives**
 
-1. Understand the structure of clicker data
+1. Understand the structure of the clicker data
 2. Create multiple different visualizations
 3. Design and implement an instructor and student dashboard
 4. Critically evaluate your own dashboard design
 
-You are given aggregated clicker records for a CS course taught at Cornell. There are two datasets: the experience dataset and the quiz dataset.
+I am given aggregated clicker records for a CS course taught at Cornell. There are two datasets: the experience dataset and the quiz dataset.
 
-**Scenario** 
-
-You are approached by a college instructor who uses iClickers in her CS class on Business Intelligence. She would like to gain insights about her students and how they are engaging/performing in order to better help them in class. She would also like to better support students by giving them feedback at scale about where they stand and perhaps how they compare to others in the class.
-
-You offer to build a prototype of a dashboard using her clicker data: this is a dashboard for the instructor which offers an overview of the class characteristics, engagement, and performance; and it is a dashboard for students which offers a specific student an overview of their engagement and performance (and how it compares to others).
 
 **Data**
 
@@ -85,7 +80,6 @@ load("info4100.proj.dashboard.rda")
 
 # Part 1: Planning / Sketching
 
-Go through the planning / sketching process described in the reading about dashboards. While some dashboards are certainly better than others, there is not one correct solution here. However, spending enough time to make a concrete plan is essential for the success of your project. Everything you do to make the dashboards will be easier if you have a clear plan, especially because you will be splitting up the work and everyone needs to know what they should work on.
 
 **Question 1:** You will make a student dashboard and a teacher dashboard. Carefully consider the implications of this for design and content. To plan, answer the following prompts once for the student dashboard and then for the teacher dashboard. The more concrete you are here the easier it will be later. Focus on the concrete ideas that you will implement in the next steps. You can iterate on this step and modify your responses as your ideas for the dashboard become clearer. You should explore the dataset in R for 5-10 minutes to get a good sense of what the dataset has to offer.
 
@@ -121,21 +115,21 @@ Go through the planning / sketching process described in the reading about dashb
     + [Using a bar graph will help visualize how much of a gap of confidence there is in the different skills.]
     + [Visualizations will effectively summarize the key insights from the data for the instructor, providing a quick overview of areas where the material may not be effective, allowing them to better prepare for future course]
 
-**Question 2:** Based on your plan above, make a sketch of what the dashboard would look like. See this week's readings for examples. Be detailed about what kinds of data points and visualizations you want to see in different parts of the page. Consider the user experience and how you should position more general information compared to more specific information, and where you may need some additional explanation to help the viewer understand a graphic, for example. In your sketch, it is useful to give labels to different objects, because in the steps below you can split up work between team members and the labels will help you connect the UI with the data objects. Show your sketches in section to get feedback from the teaching team.
+
 
 Each dashboard should contain at least 4 data visualizations. You may include any additional summary statistics (e.g. key percentages or tables).
+
 ```{r}
 knitr::include_graphics("/Users/kashmalaarif/Documents/Info 4100/pic.png")
 ```
 
 # Part 2: Dashboard Wire-frame Implementation
 
-This is where you generate the dashboard layout. You are given a very basic wire frame example for the dashboard below. For more information on how R Shiny Dashboards work, look at https://rstudio.github.io/shinydashboard/get_started.html and https://rstudio.github.io/shinydashboard/structure.html. You can add different types of content into a `fuidRow()`. In the starter code, there are 2 rows of content: the first has two little info boxes; the second has two larger viz boxes. You can add more rows and change what is in them as you wish. Follow the naming convention, e.g. `inst.info1` is the first info box for instructors.
+This is where I generate the dashboard layout.
 
 Your team can split up the tasks. Some work on creating the UI (this part), while others work on pre-processing the data and creating the statistics and visualizations that will populate the UI (next part).
 
-**Question 3:** Create the layout for the dashboard tabs. You can have as many "tabs" as you like. Each tab is the content displayed when the user clicks on one of the menu items (so it is the page content). Here you are just specifying the wire frame i.e. **what goes where on the pages**, not what goes into it.
-
+Creating the layout for the dashboard tabs.
 ```{r}
 #######################################
 ####### BEGIN INPUT: Question 3 #######
@@ -228,11 +222,9 @@ student_dash = tabItem(
 
 # Part 3: Data Pre-processing
 
-Get the data ready for use in the dashboard. Before the next stage, you want to have the data ready in the right format for simple computations and plotting. To do this effectively, you need to know by now what you want to display in each dashboard. However, this is also an iterative process. Once you have completed a first iteration of the design, you can come back to this step and add further pre-processing for more visualizations you like to add. This step is also an opportunity to better understand the structure of the datasets.
 
-The instructor dashboard should show information for all students. The student dashboard is typically focused on an individual student. You can either pick a student (at random or intentionally) and use them as the "reference student" for the student dashboard. Or, a bit more ambitious but also more rewarding to try out, you can create an interactive dashboard in which you select the student and then the dashboard updates to show the information for that student. I would recommend you start with the simpler version and get that to work before you try to make it dynamic.
+The instructor dashboard should show information for all students. The student dashboard is typically focused on an individual student. 
 
-Use the space below to be ready for your information visualizations in the dashboards. 
 
 ```{r}
 ### ODESSA 
@@ -275,7 +267,7 @@ studentfeeling_overtime <- studentfeeling_overtime +
             color = "#304674")
 
 
-### DANVASS
+
 student_attendance <- quiz |>
   group_by(STUDENT_KEY) |>
   summarise(total_attendance = sum(ATTENDED))
@@ -405,7 +397,7 @@ student_accuracy <- student_data %>%
         theme(axis.text.x = element_text(angle = 45, hjust = 1))
     
  
-### AKOSUA
+
 attendance <- quiz |>
   group_by(STUDENT_KEY) |>
   summarise(total_attendance = sum(ATTENDED, na.rm = TRUE))
@@ -468,9 +460,8 @@ proportion_plot <- ggplot(avg_prop, aes(x = factor(SESSION_NUMBER), y = avg_per_
 
 # Part 4: Prepare All Data Visualizations
 
-This is where you create the content for the wire frames you created above. Again, you can refer to the examples and documentation in https://rstudio.github.io/shinydashboard/get_started.html and https://rstudio.github.io/shinydashboard/structure.html for guidance. You can also find many examples online just by searching with Google.
 
-**Question 4:** For each of the pieces of content you planned for in the wire frames above, generate the relevant content. You need to assign them all to the `output` variable by referencing the name of the wire frame element you chose above like this `output$name.of.element`. 
+
 
 ```{r}
 
@@ -591,7 +582,7 @@ ui = dashboardPage(dhead, dside, dbody)
 # Generating a local instance of your dashboard
 ```
 
-**Question 5:** Add screenshots of your group's dahsboards below using this syntax or simply add them to the Word document after knitting:
+Screenshots of dahsboards below:
 
 ![Dashboard Screenshot](/Users/kashmalaarif/Documents/Info 4100/student.png)
 
@@ -603,47 +594,3 @@ ui = dashboardPage(dhead, dside, dbody)
 
 ![Dashboard Screenshot](/Users/kashmalaarif/Documents/Info 4100/i2.png)
 
-**Question 6:** Evaluate your group dashboard from the perspective of the instructor (teacher dashboard) and from the perspective of the student (student dashboard). What do you like about it, what would you change or add to it if you had more time?
-
-*Reflection for the student dashboard*
-
-* What do you like about it?
-    + [I enjoyed working in a group and learning more about the UX in data science.]
-
-* What would you change or add to it if you had more time?
-    + [I would change the UX of the dashboard. It is important for students to see the visualizations as clearly as possible for them to be effective. ]
-
-* What was the biggest challenge you faced? How did you address it?
-    + [The biggest challenge I had was understanding what important pieces of information students would need to see.]
-
-*Reflection for the teacher dashboard*
-
-* What do you like about it?
-    + [I liked being in the perspective of the teacher becaus eit helped me self reflect what things I would want to see change in.]
-
-* What would you change or add to it if you had more time?
-    + [I would add more informational peices of data that would really help the teacher's curriculum.]
-
-* What was the biggest challenge you faced? How did you address it?
-    + [The biggest challenge was understanding what a teacher really needs to se eon their dashbaord. ]
-
-# Self-reflection
-
-**Briefly summarize your experience on this homework. What was easy, what was hard, what did you learn?**
-
-- I really enjoyed working with people and learning how to put all these different pieces of data together into one dashboard.
-
-# Estimate time spent
-**We want to give students an estimate of how much time this homework will take. Please indicate how many hours you spent to complete this homework here.**
-
-- I spent [3] hours.
-
-# Generative AI usage
-**As stated in the course syllabus, using generative AI is allowed to help you as you complete this homework. We are interested in how it is being used and whether it is helpful for you.**
-
-- How much did you use generative AI (e.g., not at all, some, most, or all the questions) and which one did you use?
-- If you used generative AI, how did you use it and was it helpful? I used a little bit to understand how combining the data set to get my own would look like.
-
-# Submit Homework
-
-This is the end of the homework. Please **Knit to Word**. The resulting file has to show both the R code and R output. Upload it on the EdX platform before the due date.
